@@ -15,7 +15,6 @@ interface CardProps {
     id:string
 }
 export const Card = ({ title, link, type, description ,id}: CardProps) => {
-    
     const descriptionStyle = "mt-2 font-sans text-lg "
     useEffect(() => {
         if (type === "twitter" && (window as any).twttr) {

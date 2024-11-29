@@ -7,6 +7,7 @@ import { ContentType, contentTypeAtom } from "../../Atoms/ContentTypeAtom"
 import { BACKEND_URL } from "../../config"
 import axios from "axios"
 
+
 export const CreateContentModel = ({ open, onClick }: { open: boolean, onClick: () => void }) => {
     const titleRef = useRef<HTMLInputElement>(null);
     const linkRef = useRef<HTMLInputElement>(null);

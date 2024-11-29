@@ -81,8 +81,8 @@ app.get("/api/v1/content",UserMiddleware,async(req,res)=>{
     const userId = req.userId
     const content = await ContentModel.find({
         userId
-    }).populate("userId","username")
-
+    })
+    // .populate("userId","username") no need 
     res.json({
         content
     })
