@@ -6,7 +6,10 @@ import { CreateContentModel } from "../components/ui/CreateContentModel"
 import { RecoilRoot, useSetRecoilState, useRecoilValue } from "recoil"
 import { SideBar } from "../components/ui/Sidebar"
 import { useContent } from "../hooks/useContent"
-import { Card } from "../components/ui/card"
+
+import { BACKEND_URL, STARTING_URL } from "../config"
+import axios from "axios"
+import { Card } from "../components/ui/Card"
 
 export function YouTube() {
   return <RecoilRoot>
@@ -28,7 +31,28 @@ const Site = () => {
       }}></CreateContentModel>
       <div className="flex justify-end gap-4 pb-6">
         <Button onClick={() => { setModelOpen(setModelOpen => !setModelOpen) }} varient="primary" text="Add Content" startIcon={<PlusIcon />}></Button>
-        <Button varient="secondary" text="Share Brain" startIcon={<ShareIcon />}></Button>
+        <Button onClick={async () => {
+          const response = await axios.post(`${BACKEND_URL}/api/v1/brain/share`, {
+            share: true
+          }, {
+            headers: {
+              "Authorization": localStorage.getItem("token")
+            }
+          });
+          // @ts-ignore
+          const shareURL = `${STARTING_URL}${response.data.hash}`
+          // Copy to clipboard and alert the URL
+          navigator.clipboard
+            .writeText(shareURL)
+            .then(() => {
+              alert(`Copied to clipboard: ${shareURL}`);
+            })
+            .catch((err) => {
+              console.error("Failed to copy:", err);
+              alert("Failed to copy the link. Please try again.");
+            });
+        }}
+        varient="secondary" text="Share Brain" startIcon={<ShareIcon />}></Button>
       </div>
       <div className="ml-6">
         <div className=" flex gap-6 flex-wrap">
