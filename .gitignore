@@ -1,0 +1,6 @@
+.DS_Store
+# Ignore node_modules and dist folders in frontend and backend
+/LeftBrain_Backend/node_modules/
+/LeftBrain_Backend/dist/
+/LeftBrain_Frontend/node_modules/
+
