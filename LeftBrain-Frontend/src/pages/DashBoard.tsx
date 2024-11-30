@@ -42,12 +42,8 @@ const Site = () => {
           navigator.clipboard
             .writeText(shareURL)
             .then(() => {
-              alert(`Copied to clipboard: ${shareURL}`);
+              alert(`Copied to clipboard`);
             })
-            .catch((err) => {
-              console.error("Failed to copy:", err);
-              alert("Failed to copy the link. Please try again.");
-            });
         }}
         varient="secondary" text="Share Brain" startIcon={<ShareIcon />}></Button>
       </div>

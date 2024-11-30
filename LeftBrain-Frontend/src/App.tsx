@@ -5,6 +5,7 @@ import { BrowserRouter, Routes , Route} from "react-router-dom"
 import { Tweets } from "./pages/Tweets"
 import { YouTube } from "./pages/Youtube"
 import { Document } from "./pages/Document"
+import { SharedBrain} from "./pages/SharedBrain"
 
 function App() {
   return  <BrowserRouter>
@@ -15,6 +16,7 @@ function App() {
            <Route path="/twitter" element={<Tweets/>} />
            <Route path="/youtube" element={<YouTube/>} />
            <Route path="/document" element={<Document/>} />
+           <Route path="/share/:share" element={<SharedBrain/>} />
       </Routes>
   </BrowserRouter>
 }

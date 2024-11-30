@@ -9,7 +9,7 @@ interface ButtonProps {
     loading?:boolean;
 }
 const varientClass = {
-    "primary" : "bg-purple-600 text-white",
+    "primary" : "bg-purple-600 text-white hover:bg-purple-500",
     "secondary": "bg-purple-200 text-purple-600"
 }
 const defaultStyles = "px-4 py-2 rounded-md font-light flex items-center justify-center"

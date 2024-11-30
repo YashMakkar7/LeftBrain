@@ -88,42 +88,6 @@ app.get("/api/v1/content",UserMiddleware,async(req,res)=>{
     })
 })
 
-app.get("/api/v1/content/document",UserMiddleware,async(req,res)=>{
-    // @ts-ignore
-    const userId = req.userId
-    const type = "document"
-    const content = await ContentModel.find({
-        userId,type
-    }).populate("userId","username")
-
-    res.json({
-        content
-    })
-})
-app.get("/api/v1/content/youtube",UserMiddleware,async(req,res)=>{
-    // @ts-ignore
-    const userId = req.userId;
-    const type = "youtube";
-    const content = await ContentModel.find({
-        userId,type
-    }).populate("userId","username")
-
-    res.json({
-        content
-    })
-})
-app.get("/api/v1/content/twitter",UserMiddleware,async(req,res)=>{
-    // @ts-ignore
-    const userId = req.userId
-    const type = "twitter"
-    const content = await ContentModel.find({
-        userId,type 
-    }).populate("userId","username")
-
-    res.json({
-        content
-    })
-})
 app.delete("/api/v1/content",UserMiddleware,async(req,res)=>{
     const contentId = req.headers.contentId;
     await ContentModel.deleteOne({
