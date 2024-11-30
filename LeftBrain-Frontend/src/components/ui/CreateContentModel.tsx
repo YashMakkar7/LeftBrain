@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { CrossIcon } from "../icons/CrossIcon"
 import { Button } from "./Button"
 import { Input } from "./Input"
@@ -13,6 +13,12 @@ export const CreateContentModel = ({ open, onClick }: { open: boolean, onClick: 
     const linkRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
     const [type, setType] = useRecoilState(contentTypeAtom);
+
+    useEffect(() => {
+        if (open && titleRef.current) {
+            titleRef.current.focus();
+        }
+    }, [open]);
 
     async function addContent() {
         const title = titleRef.current?.value;
