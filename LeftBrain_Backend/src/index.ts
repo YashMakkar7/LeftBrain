@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import jwt from "jsonwebtoken";
 import { ContentModel, LinkModel, UserModel } from "./db";
 import { JWT_PASSWORD } from "./config";
@@ -8,6 +8,8 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import { z } from "zod";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -16,44 +18,78 @@ app.use(express.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
+
+const requiredBody = z.object({
+  username: z.string().min(4).max(40),
+  password: z
+    .string()
+    .min(3)
+    .regex(/[A-Z]/, "Password must contain one uppercase")
+    .regex(/[a-z]/, "Password must contain one Lowercase")
+    .regex(/[0-9]/,"Password must contain one Digit")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character")
+    .max(50)
+});
+
 app.post("/api/v1/signup", async (req, res) => {
-  //todos zod validation , hash the password , status codes
+
+  const parseBodySuccess = requiredBody.safeParse(req.body)
+
+  if(!parseBodySuccess.success){
+    res.status(400).json({
+        msg:"Invalid Input Data"
+    })
+    return;
+  }
+
   const username = req.body.username;
   const password = req.body.password;
+  
+  const hashedPassword = await bcrypt.hash(password, 4);
 
   try {
     await UserModel.create({
       username: username,
-      password: password,
+      password: hashedPassword,
     });
 
     res.json({
       msg: "User signed up",
     });
   } catch (e) {
-    res.status(400).json({
+    res.status(404).json({
       msg: "User already exists",
     });
   }
 });
+
 app.post("/api/v1/signin", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  const existingUser = await UserModel.findOne({
+  const response = await UserModel.findOne({
     username,
-    password,
   });
-  if (existingUser) {
+
+  if (!response) {
+    res.status(404).json({
+      msg: "User not exist",
+    });
+  }
+
+  //@ts-ignore
+  const passwordMatch = await bcrypt.compare(password, response.password);
+  if (passwordMatch) {
     const token = jwt.sign(
       {
-        id: existingUser._id,
+        id: response._id,
       },
       JWT_PASSWORD
     );
-
-    res.json({
-      token,
+    res.json({ token });
+  } else {
+    res.status(411).json({
+      msg: "Incorrect Credentials",
     });
   }
 });
