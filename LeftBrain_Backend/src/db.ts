@@ -1,7 +1,4 @@
-import mongoose, { model, Schema, Types } from "mongoose";
-mongoose.connect(
-  "mongodb+srv://admin:P18Uq8bZf73f5bf8@cluster0.9lrbd.mongodb.net/Brainly"
-);
+import mongoose, { model, Schema } from "mongoose";
 
 // This is only for signup and signin endPoint
 const UserSchema = new Schema({
